@@ -156,7 +156,7 @@ describe("Central de Atendimento ao Cliente TAT", () => {
       .and('have.attr', 'target', '_blank')
   });
 
-  it.only("seleciona um arquivo da pasta fixtures", () => {
+  it("seleciona um arquivo da pasta fixtures", () => {
     cy.contains('a', 'Política de Privacidade')
       .should('have.attr', 'href', 'privacy.html')
       .and('have.attr', 'target', '_blank')

@@ -32,7 +32,7 @@ describe("Central de Atendimento ao Cliente TAT", () => {
     cy.get("#phone").type("qwerty").should("have.value", "");
   });
 
-  it.only("exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário", () => {
+  it("exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário", () => {
     cy.get("#firstName").type("Paulo");
     cy.get("#lastName").type("Germano");
     cy.get("#email").type("teste@teste..com");
@@ -86,5 +86,79 @@ describe("Central de Atendimento ao Cliente TAT", () => {
     cy.fillMandatoryFieldsAndSubmit(data);
 
     cy.get(".success").should("be.visible");
+  });
+
+  it("seleciona um produto (Mentoria) por seu valor (value)", () => {
+    cy.get("#product")
+      .select(1)
+      .should("have.value", "blog")
+  });
+
+  it("marca o tipo de atendimento Feedback", () => {
+    cy.get('input[type="radio"][value="feedback"]')
+      .check()
+      .should("have.value", "feedback")
+  });
+
+  it("marca o tipo de atendimento Feedback", () => {
+    cy.get('input[type="radio"][value="feedback"]')
+      .check()
+      .should("have.value", "feedback")
+  });
+
+  it("marca ambos checkboxes, depois desmarca o último", () => {
+    cy.get('input[type="checkbox"]').check()
+      .should("be.checked")
+      .last()
+      .uncheck()
+      .should("not.be.checked")
+  });
+
+  it("exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário", () => {
+    cy.get("#firstName").type("Paulo");
+    cy.get("#lastName").type("Germano");
+    cy.get("#email").type("teste@teste..com");
+    cy.get("#open-text-area").type("a");
+    cy.get("#phone-checkbox").check();
+    cy.contains("button", "Enviar").click();
+
+    cy.get(".error").should("be.visible");
+  });
+
+  it("seleciona um arquivo da pasta fixtures", () => {
+    cy.get('#file-upload')
+      .selectFile('cypress/fixtures/example.json')
+      .should(input => {
+        expect(input[0].files[0].name).to.equal('example.json')
+      })
+  });
+
+  it("seleciona um arquivo simulando um drag-and-drop", () => {
+    cy.get('#file-upload')
+      .selectFile('cypress/fixtures/example.json', { action: 'drag-drop' })
+      .should(input => {
+        expect(input[0].files[0].name).to.equal('example.json')
+      })
+  });
+
+  it("seleciona um arquivo utilizando uma fixture para a qual foi dada um alias", () => {
+    cy.fixture('example.json').as('sampleFile')
+    cy.get('#file-upload')
+      .selectFile('@sampleFile')
+      .should(input => {
+        expect(input[0].files[0].name).to.equal('example.json')
+      })
+  });
+
+  it("verifica que a política de privacidade abre em outra aba sem a necessidade de um clique", () => {
+    cy.contains('a', 'Política de Privacidade')
+      .should('have.attr', 'href', 'privacy.html')
+      .and('have.attr', 'target', '_blank')
+  });
+
+  it.only("seleciona um arquivo da pasta fixtures", () => {
+    cy.contains('a', 'Política de Privacidade')
+      .should('have.attr', 'href', 'privacy.html')
+      .and('have.attr', 'target', '_blank')
   });
 });
